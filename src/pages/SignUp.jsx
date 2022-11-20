@@ -34,7 +34,9 @@ const SignUp = () => {
 
   const onSubmitForm = async (e) => {
     e.preventDefault()
-    
+    if (name === '' || email === '' || password === '') {
+      toast.error('All inputs must be correctly entered');
+    }
     try {
       const auth = getAuth()
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -55,7 +57,7 @@ const SignUp = () => {
      
     } catch (error) {
       // error.message === ''
-      toast.error('Something went wrong with the registration');
+      // toast.error('Something went wrong with the registration');
       console.log(error.code);
     }
 }
