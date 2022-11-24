@@ -8,7 +8,7 @@ import { db } from '../firebase';
 const Profile = () => {
   const auth = getAuth()
   const navigate = useNavigate()
-  const [changeDetail, setChangeDetail] = useState('false')
+  const [changeDetail, setChangeDetail] = useState(false)
   const [formData, setFormData] = useState({
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
@@ -81,11 +81,11 @@ const Profile = () => {
               type="email"
               id='email'
               value={email}
-              disabled={!changeDetail}
+              disabled
               onChange={onChange}
               className={`w-full mb-6 px-4 py-2 text-xl text-gray-700
                bg-white border border-gray-300 rounded transition ease-in-out
-               ${changeDetail && 'bg-red-200 focus:bg-red-200'}`}
+              `}
             />
 
             <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg mb-6">
@@ -96,6 +96,7 @@ const Profile = () => {
                     setChangeDetail((prevState) => !prevState)
                   }}
                   className='text-red-600 hover:text-red-700 transition ease-in-out duration-200 ml-1 cursor-pointer'>
+                  
                   {changeDetail ? 'Apply change' : 'Edit'}
                 </span>
               </p>
