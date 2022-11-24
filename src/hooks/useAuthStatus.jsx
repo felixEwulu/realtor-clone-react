@@ -11,8 +11,10 @@ export const useAuthStatus = () => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 setLoggedIn(true)
+
             }
             setCheckingStatus(false)
+
         })
     }, [])
 
