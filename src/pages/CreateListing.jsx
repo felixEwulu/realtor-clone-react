@@ -2,12 +2,12 @@ import { useState } from "react"
 
 const CreateListing = () => {
     const [formData, setFormData] = useState({
-        type: 'rent',
+        type: 'sale',
         name: '',
         bedrooms: 1,
         bathrooms: 1,
         packing: false,
-        furnished: false,
+        furnished: true,
         address: '',
         description: '',
         offer: true,
@@ -17,7 +17,28 @@ const CreateListing = () => {
     const { type, name, bedrooms, bathrooms, packing, furnished,
         address, description, offer, regularPrice, discountedPrice} = formData;
 
-    const onChange = () => {
+    const onChange = (e) => {
+        // based on the input, we change the boolean value
+        let boolean = null;
+        if (e.target.value === 'true') boolean = true;
+        if (e.target.value === 'false') boolean = false;
+
+        // files
+        if (e.target.files) {
+            setFormData((prevState) => ({
+                ...prevState,
+                images: e.target.files
+            }))
+        }
+        // text, boolean or numbers
+        if (!e.target.files) {
+            setFormData((prevState) => ({
+                ...prevState,
+                [e.target.id]: boolean ?? e.target.value
+            }))
+        }
+
+
 
     }
   return (
@@ -35,7 +56,7 @@ const CreateListing = () => {
                       onClick={onChange}
                       className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-sm rounded hover:shadow-lg
                       focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                      ${type === 'sale' ? 'bg-white text-black' : 'bg-slate-600 text-white'}`}
+                      ${type === 'sale' ? 'bg-slate-600 text-white' : 'bg-white text-black' }`}
                   >
                       Sell
                   </button>
@@ -43,11 +64,11 @@ const CreateListing = () => {
                   <button
                       type="button"
                       id="type"
-                      value='sale'
+                      value='rent'
                       onClick={onChange}
                       className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-sm rounded hover:shadow-lg
                       focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                      ${type === 'rent' ? 'bg-white text-black' : 'bg-slate-600 text-white'}`}
+                      ${type === 'rent' ? 'bg-slate-600 text-white' : 'bg-white text-black' }`}
                   >
                       rent
                   </button>
@@ -72,7 +93,7 @@ const CreateListing = () => {
 
                   <div>
                       <p className="text-lg font-semibold">Baths</p>
-                      <input type="number" id="bedrooms" value={bathrooms}
+                      <input type="number" id="bathrooms" value={bathrooms}
                           onChange={onChange} min='1' max='15' required
                           className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300
                       rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 text-center"/>
@@ -88,7 +109,7 @@ const CreateListing = () => {
                       onClick={onChange}
                       className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-sm rounded hover:shadow-lg
                       focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                      ${!packing ? 'bg-white text-black' : 'bg-slate-600 text-white'}`}
+                      ${packing ? 'bg-slate-600 text-white' : 'bg-white text-black' }`}
                   >
                       Yes
                   </button>
@@ -100,7 +121,7 @@ const CreateListing = () => {
                       onClick={onChange}
                       className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-sm rounded hover:shadow-lg
                       focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                      ${packing ? 'bg-white text-black' : 'bg-slate-600 text-white'}`}
+                      ${!packing ? 'bg-slate-600 text-white' : 'bg-white text-black' }`}
                   >
                       no
                   </button>
@@ -115,7 +136,7 @@ const CreateListing = () => {
                       onClick={onChange}
                       className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-sm rounded hover:shadow-lg
                       focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                      ${!furnished ? 'bg-white text-black' : 'bg-slate-600 text-white'}`}
+                      ${furnished ? 'bg-slate-600 text-white' : 'bg-white text-black' }`}
                   >
                       yes
                   </button>
@@ -127,7 +148,7 @@ const CreateListing = () => {
                       onClick={onChange}
                       className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-sm rounded hover:shadow-lg
                       focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                      ${furnished? 'bg-white text-black' : 'bg-slate-600 text-white'}`}
+                      ${!furnished? 'bg-slate-600 text-white' : 'bg-white text-black' }`}
                   >
                       rent
                   </button>
