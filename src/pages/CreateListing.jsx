@@ -1,6 +1,19 @@
 import { useState } from "react"
+import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { getAuth } from "firebase/auth";
+import { v4 as uuidv4 } from 'uuid';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
+import { useNavigate } from 'react-router-dom';
+
 
 const CreateListing = () => {
+    const navigate = useNavigate()
+    const auth = getAuth()
+    const [geolocationEnabled, setGeolocationEnabled] = useState(false)
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         type: 'sale',
         name: '',
@@ -12,10 +25,13 @@ const CreateListing = () => {
         description: '',
         offer: true,
         regularPrice: 0,
-        discountedPrice: 0
+        discountedPrice: 0,
+        latitude: 0,
+        longitude: 0,
+        images: {},
     })
     const { type, name, bedrooms, bathrooms, packing, furnished,
-        address, description, offer, regularPrice, discountedPrice} = formData;
+        address, description, offer, regularPrice, discountedPrice, latitude, longitude, images} = formData;
 
     const onChange = (e) => {
         // based on the input, we change the boolean value
@@ -37,16 +53,106 @@ const CreateListing = () => {
                 [e.target.id]: boolean ?? e.target.value
             }))
         }
+    }
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true)
 
+        if (+discountedPrice >= +regularPrice) {
+            setLoading(false);
+            toast.error('DIscounted price needs to be less than regular price!')
+            return;
+        }
+        
+        if (images.length > 6) {
+            setLoading(false);
+            toast.error('maximum 6 images are allowed')
+            return;
+        }
+
+        let geolocation = {};
+        let location;
+        if (!geolocationEnabled) {
+            geolocation.lat = latitude;
+            geolocation.lng = longitude;
+        }
+
+        const storeImage = async (image) => {
+            return new Promise((resolve, reject) => {
+                const storage = getStorage();
+                const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`
+                const storageRef = ref(storage, filename);
+                const uploadTask = uploadBytesResumable(storageRef, image);
+
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        // console.log(`Upload is ${progress}% done`);
+                        // switch (snapshot.state) {
+                        //     case 'paused':
+                        //         console.log('Upload is paused');
+                        //         break;
+                        //     case 'running':
+                        //         console.log('Upload is running');
+                        //         break;
+                              
+                        // }
+
+                    },
+                    (error) => {
+                        reject(error)
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            resolve(downloadURL);
+                        })
+                    }
+                
+                )  
+
+            })
+        }
+
+        const imgUrls = await Promise.all(
+            [...images].map(img => storeImage(img))
+        ).catch(error => {
+            console.log(error);
+            setLoading(false);
+            toast.error('Images not uploaded')
+            return;
+        })
+
+        const formDataCopy = {
+            ...formData,
+            
+            imgUrls,
+            geolocation,
+            timestamp: serverTimestamp(),
+        };
+        delete formDataCopy.images;
+        delete formDataCopy.latitude;
+        delete formDataCopy.longitude;
+        !formDataCopy.offer && delete formDataCopy.discountedPrice;
+
+        // move the form copy to firestore database
+        const docRef = await addDoc(collection(db, 'listings'), formDataCopy);
+        toast.success('listing created');
+        navigate(`/category/${formDataCopy.type}/${docRef.id}`)
 
 
     }
+
+    if (loading) {
+        return <Spinner/>
+    }
+
+
   return (
       <main className="max-w-md mx-auto px-2">
           <h1 className="text-3xl text-center mt-6 font-bold">
               Create a Listing
           </h1>
-          <form>
+          <form onSubmit={onSubmit}>
               <p className="text-lg font-semibold">Sell/Rent</p>
               <div className="flex">
                   <button
@@ -150,7 +256,7 @@ const CreateListing = () => {
                       focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
                       ${!furnished? 'bg-slate-600 text-white' : 'bg-white text-black' }`}
                   >
-                      rent
+                      no
                   </button>
               </div>
 
@@ -161,6 +267,33 @@ const CreateListing = () => {
                   rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white
                   focus:border-slate-600 mb-6'
               />
+
+              {!geolocationEnabled && (
+                  
+                  <div className="flex space-x-6 mb-6">
+                      <div className="">
+                          <p className="text-lg font-semibold">Latitude</p>
+                          <input type="number" id="latitude" value={latitude} onChange={onChange} required
+                              min='-90'
+                              max='90'
+                          className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300
+                      rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 text-center"/>
+                      </div>
+
+                      <div className="">
+                          <p className="text-lg font-semibold">Longitude</p>
+                          <input type="number" id="longitude" value={longitude} onChange={onChange} required
+                               min='-180'
+                              max='180'
+                          className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300
+                      rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 text-center"/>
+                      </div>
+                      </div>
+              )
+                  
+              }
+
+              
 
               <p className="text-lg  font-semibold"> Description</p>
               <textarea type="text" id="description" value={description} onChange={onChange}
@@ -247,7 +380,9 @@ const CreateListing = () => {
                   <p className="text-lg font-semibold">Images</p>
                   <p className="text-gray-600">The first image will be the cover (max 6)</p>
                   <input type="file" id="images" onChange={onChange}
-                      accept='.jpg,.png,.jpeg' required
+                      accept='.jpg,.png,.jpeg'
+                      multiple
+                      required
                       className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded
                       transition duration-150 ease-in-out focus:bg-white focus:border-slate-600"
                   />
