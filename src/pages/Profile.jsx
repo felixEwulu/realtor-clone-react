@@ -52,6 +52,10 @@ const Profile = () => {
     }
   }
 
+  
+
+
+
   return (
     <>
       <section className='max-w-6xl flex flex-col justify-center items-center

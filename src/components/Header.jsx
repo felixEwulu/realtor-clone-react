@@ -38,6 +38,7 @@ const Header = () => {
                   onClick={() =>navigate('/')}/>
               </div>
 
+              {/* Navigation list menu */}
               <div>
                   <ul className="flex space-x-10">
                       <li className={`cursor-pointer py-3 text-sm font-semibold
