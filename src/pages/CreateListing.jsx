@@ -87,16 +87,16 @@ const CreateListing = () => {
                 uploadTask.on('state_changed',
                     (snapshot) => {
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        // console.log(`Upload is ${progress}% done`);
-                        // switch (snapshot.state) {
-                        //     case 'paused':
-                        //         console.log('Upload is paused');
-                        //         break;
-                        //     case 'running':
-                        //         console.log('Upload is running');
-                        //         break;
+                        console.log(`Upload is ${progress}% done`);
+                        switch (snapshot.state) {
+                            case 'paused':
+                                console.log('Upload is paused');
+                                break;
+                            case 'running':
+                                console.log('Upload is running');
+                                break;
                               
-                        // }
+                        }
 
                     },
                     (error) => {
@@ -127,7 +127,7 @@ const CreateListing = () => {
             imgUrls,
             geolocation,
             timestamp: serverTimestamp(),
-            userRef: auth.currentUser.uid
+            userRef: auth.currentUser.uid,
         };
         delete formDataCopy.images;
         delete formDataCopy.latitude;
@@ -341,6 +341,8 @@ const CreateListing = () => {
                           className="w-full px-4 py-2 text-xl text-gray-700 bg-white
                       border-gray-300 rounded transition duration-150 ease-in-out
                       focus:text-gray-700 focus:bg-white focus:border-slate-600 text-center"/>
+                          
+                          
 
                       {type === 'rent' && (
                           <div className="">
