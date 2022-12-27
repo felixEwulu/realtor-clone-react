@@ -9,6 +9,9 @@ import 'swiper/css/bundle';
 import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare } from 'react-icons/fa'
 import { getAuth } from 'firebase/auth';
 import Contact from '../components/Contact'
+import Map from '../components/Map'
+
+
 
 const Listing = () => {
   const auth = getAuth();
@@ -36,6 +39,8 @@ const Listing = () => {
   const renderContactForm = () => {
     setContactLandlord(true)
   }
+
+ 
 
  if (loading) {
   return <Spinner />
@@ -112,11 +117,11 @@ const Listing = () => {
                  </p>
 
                  {listing.offer && (
-                   <p className='w-full max-w-[200px] whitespace-nowrap bg-green-800 rounded-md p-2
+                   <div className='w-full max-w-[200px] whitespace-nowrap bg-green-800 rounded-md p-2
                  text-white text-center font-semibold shadow-md'>
                      <p>${ +listing.regularPrice - +listing.discountedPrice} discount</p>
                      
-                   </p>
+                   </div>
                  )
                  
                  }
@@ -172,7 +177,14 @@ const Listing = () => {
                
              </div>
 
-             <div className='bg-blue-300 w-full h-[200px] lg-[400px] z-10 overflow-x-hidden'>
+             <div className=' w-full h-[300px] md:h-[400px] z-10 overflow-x-hidden mt-6 lg:mt-0 md:ml-2'>
+
+               {listing.geolocation && (
+                 <Map geolocation={listing.geolocation } />
+               )
+                 
+               }
+               
                
              </div>
       </div>
