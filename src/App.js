@@ -12,12 +12,14 @@ import Profile from "./pages/Profile";
 import CreateListing from "./pages/CreateListing";
 import EditListing from "./pages/EditListing";
 import Listing from "./pages/Listing";
+import Navbar from "./components/Navbar";
 
 function App() {
 	return (
 		<>
 			<Router>
-				<Header />
+				{/* <Header /> */}
+				<Navbar/>
 				<Routes>
 					<Route path="/" element={<Home />} />
 

@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-const Map = ({ geolocation}) => {
+const Map = ({ geolocation, listing}) => {
  const lat = +geolocation?.lat;
  const lng = +geolocation?.lng
  console.log(lat, lng);
@@ -11,6 +11,7 @@ const Map = ({ geolocation}) => {
 
   return (
    < >
+    
     <MapContainer
         style={{ width: "100%", height: "100vh" }}
         zoom={13}
@@ -25,7 +26,7 @@ const Map = ({ geolocation}) => {
         />
         <Marker position={[lat, lng]}>
           <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
+           {listing.address}
           </Popup>
         </Marker>
       </MapContainer>

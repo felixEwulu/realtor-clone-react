@@ -95,14 +95,14 @@ const Listing = () => {
              
              <div className='w-full mb-6'>
                <p className='text-2xl font-bold mb-3 text-blue-900'>
-                 {listing.name} - $ {listing.offer ?
+                 {listing.name} -  &#8358; {listing.offer ?
                  listing.discountedPrice
                  .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ','):
                  listing.regularPrice
                .toString()
                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                 {listing.type === 'rent' ? '/ month' : ''}
+                 {listing.type === 'rent' ? '/ Year' : ''}
                </p>
 
                <p className='flex items-center mt-6 mb-3 font-semibold'>
@@ -119,7 +119,9 @@ const Listing = () => {
                  {listing.offer && (
                    <div className='w-full max-w-[200px] whitespace-nowrap bg-green-800 rounded-md p-2
                  text-white text-center font-semibold shadow-md'>
-                     <p>${ +listing.regularPrice - +listing.discountedPrice} discount</p>
+                     <p> &#8358;{(+listing.regularPrice - +listing.discountedPrice)
+                     .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} discount</p>
                      
                    </div>
                  )
@@ -146,12 +148,12 @@ const Listing = () => {
 
                  <li className='flex items-center whitespace-nowrap'>
                   <FaParking className='text-lg mr-1'/>
-                   {+listing.parking ? 'Parking Spot' : 'No Parking'}
+                   {listing.packing ? 'Parking Spot' : 'No Parking'}
                  </li>
 
                  <li className='flex items-center whitespace-nowrap'>
                   <FaChair className='text-lg mr-1'/>
-                   {+listing.furnished ? 'Furnished' : 'Not Furnished'}
+                   {listing.furnished ? 'Furnished' : 'Not Furnished'}
                  </li>
                </ul>
 
@@ -180,7 +182,8 @@ const Listing = () => {
              <div className=' w-full h-[300px] md:h-[400px] z-10 overflow-x-hidden mt-6 lg:mt-0 md:ml-2'>
 
                {listing.geolocation && (
-                 <Map geolocation={listing.geolocation } />
+                 <Map geolocation={listing.geolocation}
+                 listing={listing}/>
                )
                  
                }
