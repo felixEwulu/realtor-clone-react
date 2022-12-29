@@ -2,7 +2,6 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { useLocation, useNavigate } from "react-router";
-
 const Navbar = () => {
   const [nav, setNav] = useState(false)
     const [pageState, setPageState] = useState('Sign in')
@@ -39,8 +38,8 @@ const Navbar = () => {
           <header className="flex justify-between items-center
             px-3  py-3 max-w-6xl mx-auto">
               <div>
-                  <img src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg" alt="logo"
-                      className="h-5 cursor-pointer"
+                  <img src='https://www.apartments.com/a/4d9af0/content/images/apartments-for-rent-logo.png' alt="logo"
+                      className="h-8 cursor-pointer" 
                   onClick={() =>navigate('/')}/>
               </div>
 
