@@ -50,8 +50,8 @@ const Contact = ({ listing, userRef }) => {
       </textarea>
      </div>
      <a href={`mailto:${landlord.email}?Subject=${listing.name}&body=${message}`}>
-      <button className='w-full text-center mt-3 mb-6 px-7 py-3 bg-blue-600 text-white rounded text-sm uppercase
-      shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg transition duration-150 ease-in-out font-semibold'>
+           <button className='w-full text-center mt-3 mb-6 px-7 py-3 bg-blue-600 text-white
+       rounded text-sm uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg transition duration-150 ease-in-out font-semibold'>
        Send Message
 
       </button>
