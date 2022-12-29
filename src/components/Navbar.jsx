@@ -61,6 +61,20 @@ const Navbar = () => {
                           onClick={() => navigate('/offers')}>
                           
                           Offers</li>
+                      <li
+                      className={`cursor-pointer py-3 text-sm font-semibold
+                       text-gray-400 border-b-[3px] border-b-transparent
+                       ${pathMatchRoute('/category/rent') && 'text-black border-b-red-500'}`}
+                          onClick={() => navigate('/category/rent')}>
+                          
+                          Rentals</li>
+                      <li
+                      className={`cursor-pointer py-3 text-sm font-semibold
+                       text-gray-400 border-b-[3px] border-b-transparent
+                       ${pathMatchRoute('/category/sale') && 'text-black border-b-red-500'}`}
+                          onClick={() => navigate('/category/sale')}>
+                          
+                          Sales</li>
                       
                       <li
                       className={`cursor-pointer py-3 text-sm font-semibold
