@@ -1,13 +1,11 @@
 import {MapContainer, Marker, TileLayer, Popup} from 'react-leaflet'
-import 'leaflet/dist/leaflet.css';
+// import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
 const Map = ({ geolocation, listing}) => {
  const lat = +geolocation?.lat;
  const lng = +geolocation?.lng
- console.log(lat, lng);
- 
 
   return (
    < >
