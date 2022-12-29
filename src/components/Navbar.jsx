@@ -81,8 +81,8 @@ const Navbar = () => {
      <div className={!nav ? 'fixed left-[-100%]' : "fixed left-0 top-0 w-[80%] h-full border-r border-r-sm bg-white  duration-700 ease-in-out "}>
 
         <div className="p-6">
-                  <img src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg" alt="logo"
-                      className="h-5 cursor-pointer"
+                  <img src="https://www.apartments.com/a/4d9af0/content/images/apartments-for-rent-logo.png" alt="logo"
+                      className="h-8 cursor-pointer"
         onClick={() => {
          navigate('/')
         setNav(false)
